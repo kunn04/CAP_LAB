@@ -1,0 +1,8 @@
+(base) jovyan@jupyter-cap1462-09---352a3d8d:~$ scprueba.mpi cap1462_09@150.244.65.78:~
+bash: scprueba.mpi: command not found
+(base) jovyan@jupyter-cap1462-09---352a3d8d:~$ scp prueba.mpi cap1462_09@150.244.65.78:~
+(cap1462_09@150.244.65.78) Password: 
+prueba.mpi                                                                                                   100%    8    18.0KB/s   00:00    
+(base) jovyan@jupyter-cap1462-09---352a3d8d:~$ ls
+prueba.mpi
+(base) jovyan@jupyter-cap1462-09---352a3d8d:~$ ssh cap1462_09@150.244.65.78
