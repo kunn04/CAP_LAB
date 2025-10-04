@@ -55,8 +55,10 @@ int main(int argc, char *argv[]) {
             total_sum += temp;
         }
         printf("Suma total de cuadrados: %lf\n", total_sum);
+        fflush(stdout);
     }
     
+    MPI_Barrier(MPI_COMM_WORLD);
 
     free(sub_array);
     if (rank == 0) free(array);
