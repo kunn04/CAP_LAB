@@ -6,3 +6,45 @@ prueba.mpi                                                                      
 (base) jovyan@jupyter-cap1462-09---352a3d8d:~$ ls
 prueba.mpi
 (base) jovyan@jupyter-cap1462-09---352a3d8d:~$ ssh cap1462_09@150.244.65.78
+
+
+
+El problema que estás viendo es muy común en clusters con SLURM. Te explico qué está pasando:
+
+Análisis del problema:
+Primera ejecución: Solo 1 proceso → 1 salida
+Segunda ejecución con salloc -N 2 -n 4: 4 procesos → 4 salidas
+El issue es que cuando usas srun sin especificar el número de procesos MPI, SLURM ejecuta 4 instancias independientes del programa (una por cada tarea -n 4), pero cada una como un proceso MPI independiente con size=1 y rank=0.
+
+Necesito ver el código actual para confirmar el problema:
+
+Read suma_cuadrados2.c
+
+El código está correcto. El problema es de configuración de SLURM. Aquí tienes las soluciones:
+
+Solución 1: Usar mpirun o mpiexec
+En lugar de srun, usa:
+
+
+mpirun -np 4 suma_cuadrados2# ompiexec -n 4 suma_cuadrados2
+Solución 2: Configurar srun correctamente
+Si quieres usar srun, especifica que es un trabajo MPI:
+
+
+srun --mpi=pmix_v3 -n 4 suma_cuadrados2# osrun --ntasks-per-node=2 -n 4 suma_cuadrados2
+Solución 3: Añadir información de debugging al código
+Para diagnosticar mejor, vamos a añadir información que muestre qué está pasando:
+
+suma_cuadrados2.c+2-1
+suma_cuadrados2.c+2-1
+Explicación del problema:
+salloc -N 2 -n 4: Reserva 2 nodos con 4 tareas total
+srun suma_cuadrados2: Sin parámetros MPI, ejecuta 4 instancias separadas
+Cada instancia ve size=1 porque no están comunicándose entre sí
+Para arreglar tu ejecución actual:
+En tu terminal del cluster, ejecuta:
+
+
+# Opción 1: Usar mpirunmpirun -np 4 suma_cuadrados2# Opción 2: Configurar srun correctamente  srun --mpi=pmix_v3 -n 4 suma_cuadrados2# Opción 3: Especificar distribución de tareassrun --ntasks=4 --ntasks-per-node=2 suma_cuadrados2
+El debugging que añadí te mostrará exactamente cuántos procesos ve cada instancia, lo que confirmará si el problema de comunicación MPI está resuelto.
+
