@@ -21,12 +21,14 @@ int main(int argc, char *argv[]) {
     MPI_Comm_size(MPI_COMM_WORLD, &size);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
+
     chunk = N / size;
 
     double *sub_array = (double *)malloc(chunk * sizeof(double));
 
     if (rank == 0){
         array = (double*)malloc(N * sizeof(double));
+        srand(time(NULL));
         for (int i = 0; i < N; i++) {
             array[i] = (double)rand() / RAND_MAX;
         }
@@ -55,10 +57,7 @@ int main(int argc, char *argv[]) {
             total_sum += temp;
         }
         printf("Suma total de cuadrados: %lf\n", total_sum);
-        fflush(stdout);
     }
-    
-    MPI_Barrier(MPI_COMM_WORLD);
 
     free(sub_array);
     if (rank == 0) free(array);
