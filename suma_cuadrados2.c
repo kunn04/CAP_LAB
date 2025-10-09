@@ -36,7 +36,10 @@ int main(int argc, char *argv[]) {
         printf("Datos generados. Distribuyendo entre %d procesos...\n", size);
     }
 
+    
+
     MPI_Scatter(array, chunk, MPI_DOUBLE, sub_array, chunk, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    // 
 
     local_sum = compute(sub_array, chunk);
 
