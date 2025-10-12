@@ -48,3 +48,12 @@ En tu terminal del cluster, ejecuta:
 # Opción 1: Usar mpirunmpirun -np 4 suma_cuadrados2# Opción 2: Configurar srun correctamente  srun --mpi=pmix_v3 -n 4 suma_cuadrados2# Opción 3: Especificar distribución de tareassrun --ntasks=4 --ntasks-per-node=2 suma_cuadrados2
 El debugging que añadí te mostrará exactamente cuántos procesos ve cada instancia, lo que confirmará si el problema de comunicación MPI está resuelto.
 
+
+ejecutar suma cuadrados con mpi, ya que si no se hace así, al mandar un numero n de procesos con srun. 
+Estarías n entornos diferentes de ejecución en los cuales el size es de 1 y no de n. Esto es por que no enlaza los n procesos en el mismo
+"universo" de ejecución. 
+
+Nota:; creo q no tenemos por qué resolver el casso de que N no sea divisible entre el -n que pongamos en el imput.
+
+
+
