@@ -4,13 +4,13 @@
 #SBATCH --time=00:10:00
 
 # ===========================================
-# Script genérico para el ejercicio 7
+# Script ejercicio 7
 # ===========================================
 
 # Comprobamos argumentos
 if [ $# -lt 1 ]; then
     echo "Uso: sbatch -n <num_procs> [-w <nodos>] $0 <programa> [N]"
-    echo "  <programa>: ejercicio7 | ejercicio7_computoPuro"
+    echo "  <programa>: ejercicio7  "
     echo "  [N]: tamaño del problema (por defecto 1000000)"
     exit 1
 fi
@@ -18,16 +18,12 @@ fi
 PROGRAMA=$1
 N=${2:-1000000}
 
-# Crear carpeta de resultados si no existe
 mkdir -p resultados
 
-# Compilar el programa correspondiente
+# Compilar el programa 
 if [ "$PROGRAMA" == "ejercicio7" ]; then
     mpicc ejercicio7.c -o ejercicio7
     EXEC="./ejercicio7"
-elif [ "$PROGRAMA" == "ejercicio7_computoPuro" ]; then
-    mpicc ejercicio7_computoPuro.c -o ejercicio7_computoPuro
-    EXEC="./ejercicio7_computoPuro"
 else
     echo "Error: programa no reconocido ($PROGRAMA)"
     exit 1
