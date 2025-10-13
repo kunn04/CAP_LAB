@@ -7,19 +7,16 @@
 # Script genérico para el ejercicio 6
 # ===========================================
 
-# Comprobamos argumentos
 if [ $# -lt 1 ]; then
     echo "Uso: sbatch -n <num_procs> -w <lista_nodos> experimento_mpi.sbatch <latencia|ancho_banda> [tam_bloque]"
     exit 1
 fi
 
 PROGRAMA=$1
-BLOCK_SIZE=${2:-1024}  # Por defecto 1024 bytes para ancho de banda
+BLOCK_SIZE=${2:-1024} 
 
-# Crear carpeta de resultados si no existe
 mkdir -p resultados
 
-# Compilar el programa correspondiente
 if [ "$PROGRAMA" == "latencia" ]; then
     mpicc ejemplo_latencia.c -o latencia
     EXEC="./latencia"
@@ -31,11 +28,9 @@ else
     exit 1
 fi
 
-# Nombre del archivo de salida
 OUTFILE="resultados/${PROGRAMA}_$(date +%Y%m%d_%H%M%S)_${SLURM_JOB_ID}.txt"
 
 echo "Ejecutando experimento: $PROGRAMA"
 echo "Guardando resultados en: $OUTFILE"
 
-# Ejecutar con MPI (SLURM ya define nodos y número de procesos con -n y -w)
 mpirun $EXEC > "$OUTFILE"
