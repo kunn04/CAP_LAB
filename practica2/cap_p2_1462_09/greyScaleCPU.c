@@ -96,7 +96,6 @@ int main(int nargs, char **argv) {
         __m256 total = _mm256_hadd_ps(res, res);
 
         total = _mm256_permutevar8x32_ps(total, orden);
-        // Convertimos a entero de 32 bits
         __m128i gris = _mm_cvtps_epi32(_mm256_extractf128_ps(total, 0));
 
 
