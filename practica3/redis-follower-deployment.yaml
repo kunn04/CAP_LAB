@@ -1,0 +1,36 @@
+# SOURCE: https://cloud.google.com/kubernetes-engine/docs/tutorials/guestbook
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-follower
+  labels:
+    app: redis
+    role: follower
+    tier: backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+        role: follower
+        tier: backend
+    spec:
+      containers:
+      - name: follower
+        image: us-docker.pkg.dev/google-samples/containers/gke/gb-redis-follower:v2
+        resources:
+          # EL MÍNIMO
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          # EL MÁXIMO, si se supera, el contenedor puede ser terminado
+          limits:
+            cpu: 200m
+            memory: 200Mi
+        ports:
+        - containerPort: 6379
