@@ -1,0 +1,35 @@
+# SOURCE: https://cloud.google.com/kubernetes-engine/docs/tutorials/guestbook
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+        app: guestbook
+        tier: frontend
+  template:
+    metadata:
+      labels:
+        app: guestbook
+        tier: frontend
+    spec:
+      containers:
+      - name: php-redis
+        image: us-docker.pkg.dev/google-samples/containers/gke/gb-frontend:v5
+        env:
+        - name: GET_HOSTS_FROM
+          value: "dns"
+        resources:
+          # EL MÍNIMO
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          # EL MÁXIMO, si se supera, el contenedor puede ser terminado
+          limits:
+            cpu: 200m
+            memory: 200Mi
+        ports:
+        - containerPort: 80
