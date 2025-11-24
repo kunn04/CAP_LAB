@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spark-master
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: spark-master
+  template:
+    metadata:
+      labels:
+        component: spark-master
+    spec:
+      containers:
+        - name: spark-master
+          image: dperdices/spark-master:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 7077   # puerto Spark
+            - containerPort: 8080   # WebUI
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "512Mi"
+            limits:
+              cpu: "1"
+              memory: "1Gi"
+
+
+              
